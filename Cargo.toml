@@ -20,7 +20,12 @@ repository = "https://github.com/stainless-steel/md5"
 readme = "README.md"
 categories = ["algorithms", "cryptography"]
 keywords = ["checksum", "digest", "hash", "md5"]
+exclude = ["/sgx/*"]
 
 [features]
-default = ["std"]
-std = []
+default = ["std", "mesalock_sgx"]
+std = ["mesalock_sgx"]
+mesalock_sgx = ["std", "sgx_tstd"]
+
+[dependencies]
+sgx_tstd = { rev = "v1.0.9", git = "https://github.com/baidu/rust-sgx-sdk.git", optional = true }

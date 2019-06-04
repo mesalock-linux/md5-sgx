@@ -29,16 +29,24 @@
 // https://tools.ietf.org/html/rfc1321
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![cfg_attr(not(target_env = "sgx"), no_std)]
+#![cfg_attr(target_env = "sgx", feature(rustc_private))]
 
-#[cfg(feature = "std")]
+#[cfg(not(target_env = "sgx"))]
+#[macro_use]
+extern crate sgx_tstd as std;
+
+#[cfg(all(feature = "std", target_env = "sgx"))]
 use std as core;
 
 use core::convert;
 use core::fmt;
 use core::ops;
 
-#[cfg(feature = "std")]
+#[cfg(all(feature = "std", target_env = "sgx"))]
 use core::io;
+#[cfg(all(feature = "std", not(target_env = "sgx")))]
+use std::io;
 
 /// A digest.
 #[derive(Clone, Copy, Eq, Hash, PartialEq)]
